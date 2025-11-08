@@ -16,15 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from app1.views import TransactionViewSet
-
-
-router = DefaultRouter()
-router.register(r'transactions', TransactionViewSet)
-
+from rest_framework.authtoken.views import obtain_auth_token
+from app1.views import jsonrpc_view
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
-    path('',include("app1.urls"))
+    path('api/', include('app1.urls')),  # api/ -> app1.urls
+    path('api/token/', obtain_auth_token, name='api_token_auth'),
+    path("api/", jsonrpc_view, name="json_rpc_api"),  # shu qatnash kerak
 ]
